@@ -1,14 +1,29 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import { Modal } from 'antd';
 
-export class ProductModal extends Component {
+interface productProps {
+  product?: {};
+  show: boolean;
+}
+
+export class ProductModal extends React.Component<productProps> {
   render() {
-    return <div></div>;
+    console.log(this.props.show);
+    return (
+      <div>
+        <Modal
+          title='Basic Modal'
+          visible={this.props.show}
+          // onOk={this.handleOk}
+          // onCancel={this.handleCancel}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
+      </div>
+    );
   }
 }
 
-const mapStateToProps = (state: any) => ({});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProductModal);
+export default ProductModal;

@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default function alerts() {
+export default function Alerts() {
   return <div></div>;
 }
