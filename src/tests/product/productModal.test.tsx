@@ -36,36 +36,39 @@ describe('Initial Rendering of elements', () => {
     const modalContainer = findByTestAttr(wrapper, 'modalContainer');
     expect(modalContainer.length).toBe(1);
   });
+
+  test('Initial State of show is false and modal is hidden', () => {
+    const wrapper = setup(null, null);
+    expect(wrapper.state('show')).toBeFalsy();
+  });
   test('renders the modal without any error', () => {
     const wrapper = setup(null, null);
     const productModal = findByTestAtrrByClassName(wrapper, 'productModal');
     expect(productModal.length).toBe(1);
   });
-  test('Initial State of show is false and modal is hidden', () => {
+  test('renders the form inside the modal', () => {
     const wrapper = setup(null, null);
-    expect(wrapper.state('show')).toBeFalsy();
+    const productModal = findByTestAtrrByClassName(wrapper, 'productForm');
+    expect(productModal.length).toBe(1);
   });
 });
 
 describe('When Different prop values are passed', () => {
-  test('When prop value for the show is passed and no product the state changes and modal is displayed with new product title', () => {
-    // const componentWillReceiveProps = jest.fn();
-    // const wrapper = setup({ show: true }, null);
-    // const titleModal = findByTestAtrrByClassName(wrapper, 'ant-modal-title');
-    // expect(titleModal.length).toBe(1);
-  });
-  test('When the cancel button is clicked the modal disappears with false show state', () => {
-    const wrapper = setup({ show: true }, null);
-    wrapper.setState({ show: true });
-    const productModal = findByTestAtrrByClassName(wrapper, 'productModal');
-    expect(productModal.length).toBe(1);
-    const cancelButton = findByTestAtrrByClassName(wrapper, 'cancelButton');
-    expect(cancelButton.length).toBe(1);
-    cancelButton.simulate('click');
-    expect(wrapper.state('show')).toBe(false);
-  });
+  // test('When prop value for the show is passed and no product the state changes and modal is displayed with new product title', () => {
+  //   // const componentWillReceiveProps = jest.fn();
+  //   // const wrapper = setup({ show: true }, null);
+  //   // const titleModal = findByTestAtrrByClassName(wrapper, 'ant-modal-title');
+  //   // expect(titleModal.length).toBe(1);
+  // });
+  // test('When the cancel button is clicked the modal disappears with false show state', () => {
+  //   const wrapper = setup(null, null);
+  //   const productModal = findByTestAtrrByClassName(wrapper, 'productModal');
+  //   expect(productModal.length).toBe(1);
+  //   const title = findByTestAtrrByClassName(wrapper, 'ant-modal-header');
+  //   expect(title.length).toBe(1);
+  // });
   // test('If the product is passed in the props then the title is edit product', () => {
-  //   const wrapper = setup({ show: true }, null);
+  //   const wrapper = setup({ show: true, product: product }, null);
   //   expect(wrapper.state('show')).toBeTruthy();
   // });
 });

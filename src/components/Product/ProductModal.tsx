@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button, Input, Form, InputNumber } from 'antd';
 import { IProduct } from '../../Models/product';
 
 interface ProductProps {
@@ -20,8 +20,6 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
   }
 
   componentWillReceiveProps(productProps: ProductProps) {
-    console.log('I am being called');
-    console.log(productProps.show);
     if (productProps.show) {
       this.setState({
         show: productProps.show,
@@ -40,6 +38,13 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
     });
   };
 
+  private saveProduct = (values: any) => {
+    console.log('Success:', values);
+  };
+  private saveProductFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
   render() {
     const { show } = this.state;
     const { product } = this.props;
@@ -52,26 +57,98 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
             visible={show}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
-            footer={[
-              <Button
-                key='back'
-                id='cancelButton'
-                className='cancelButton'
-                onClick={this.handleCancel}
+          >
+            <Form
+              id='productForm'
+              className='productForm'
+              name='basic'
+              // initialValues={{ remember: true }}
+              onFinish={this.saveProduct}
+              onFinishFailed={this.saveProductFailed}
+            >
+              <Form.Item
+                label='Product Name'
+                name='Product'
+                initialValue={product ? product.Product : null}
+                rules={[
+                  { required: true, message: 'Please add the product name!' },
+                ]}
               >
-                Cancel
-              </Button>,
-              <Button
-                key='submit'
-                id='confirmButton'
-                className='confirmButton'
-                type='primary'
-                onClick={this.handleOk}
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label='Product Code'
+                name='ProductCode'
+                initialValue={product ? product.ProductCode : null}
+                rules={[
+                  { required: true, message: 'Please add the product code!' },
+                ]}
               >
-                Submit
-              </Button>,
-            ]}
-          ></Modal>
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label='Product Location'
+                name='ProductLocation'
+                initialValue={product ? product.ProductLocation : null}
+                rules={[{ required: false }]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label='Product Cost'
+                name='ProductCost'
+                initialValue={product ? product.ProductCost : null}
+                rules={[
+                  {
+                    type: 'number',
+                    required: true,
+                    message: 'Please add the product cost',
+                  },
+                ]}
+              >
+                <InputNumber />
+              </Form.Item>
+
+              <Form.Item
+                label='Product Owner'
+                name='ProductOwner'
+                initialValue={product ? product.ProductOwner : null}
+                rules={[{ required: false }]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label='Owner Email'
+                name='OwnerEmail'
+                initialValue={product ? product.OwnerEmail : null}
+                rules={[
+                  {
+                    type: 'email',
+                    required: true,
+                    message: 'Please enter a valid email!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item>
+                <Button
+                  type='primary'
+                  className='saveProduct'
+                  id='saveProduct'
+                  htmlType='submit'
+                  onClick={this.saveProduct}
+                >
+                  Save
+                </Button>
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
       </div>
     );
