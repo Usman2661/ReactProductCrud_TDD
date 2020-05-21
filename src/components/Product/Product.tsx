@@ -11,18 +11,15 @@ export class Product extends React.Component<{}, IProductState> {
     this.state = {
       show: false,
     };
-
-    this.openModal = this.openModal.bind(this);
   }
 
-  state = { show: false };
-
-  openModal() {
+  private openModal = () => {
     this.setState({
       show: true,
     });
-  }
+  };
   render() {
+    const { show } = this.state;
     const dataSource = [
       {
         key: '1',
@@ -57,8 +54,7 @@ export class Product extends React.Component<{}, IProductState> {
     ];
     return (
       <div id='productTableContainer'>
-        <ProductModal show={this.state.show} />
-
+        <ProductModal show={show} />
         <Row style={{ marginTop: '2%' }}>
           <Col
             xs={{ span: 12 }}
