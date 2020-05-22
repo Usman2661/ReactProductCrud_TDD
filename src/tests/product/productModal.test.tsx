@@ -54,12 +54,15 @@ describe('Initial Rendering of elements', () => {
 });
 
 describe('When Different prop values are passed', () => {
-  // test('When prop value for the show is passed and no product the state changes and modal is displayed with new product title', () => {
-  //   // const componentWillReceiveProps = jest.fn();
-  //   // const wrapper = setup({ show: true }, null);
-  //   // const titleModal = findByTestAtrrByClassName(wrapper, 'ant-modal-title');
-  //   // expect(titleModal.length).toBe(1);
-  // });
+  test('By Default the form fields are empty with no text', () => {
+    const wrapper = shallow(<ProductModal show={true} edit={false} />);
+    const productModal = findByTestAtrrByClassName(wrapper, 'productForm');
+    expect(productModal.length).toBe(1);
+    const productField = findByTestAtrrByClassName(wrapper, 'Product');
+    expect(productField.length).toBe(1);
+    expect(productField.value).toBe(undefined);
+    console.log(productField.value);
+  });
   // test('When the cancel button is clicked the modal disappears with false show state', () => {
   //   const wrapper = setup(null, null);
   //   const productModal = findByTestAtrrByClassName(wrapper, 'productModal');
@@ -67,8 +70,19 @@ describe('When Different prop values are passed', () => {
   //   const title = findByTestAtrrByClassName(wrapper, 'ant-modal-header');
   //   expect(title.length).toBe(1);
   // });
-  // test('If the product is passed in the props then the title is edit product', () => {
-  //   const wrapper = setup({ show: true, product: product }, null);
-  //   expect(wrapper.state('show')).toBeTruthy();
-  // });
+  test('If the product is passed in the props then the fields should contain values', () => {
+    const wrapper = shallow(
+      <ProductModal show={true} edit={true} product={product} />
+    );
+    expect(wrapper.prop('show')).toBe(true);
+
+    console.log(wrapper.prop('show'));
+
+    // const productModal = findByTestAtrrByClassName(wrapper, 'productForm');
+    // expect(productModal.length).toBe(1);
+    // const productField = findByTestAtrrByClassName(wrapper, 'Product');
+    // expect(productField.length).toBe(1);
+    // expect(productField.value).toBe(undefined);
+    // console.log(productField.value);
+  });
 });

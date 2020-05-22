@@ -5,6 +5,7 @@ import { IProduct } from '../../Models/product';
 interface ProductProps {
   product?: IProduct;
   show: boolean;
+  edit?: boolean;
 }
 
 interface ProductState {
@@ -20,6 +21,10 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
   }
 
   componentWillReceiveProps(productProps: ProductProps) {
+    console.log(productProps.product);
+    console.log(productProps.edit);
+    console.log(productProps.show);
+
     if (productProps.show) {
       this.setState({
         show: productProps.show,
@@ -47,29 +52,33 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
 
   render() {
     const { show } = this.state;
-    const { product } = this.props;
+    const { edit, product } = this.props;
+
     return (
       <div>
         <div className='modalContainer' id='modalContainer'>
           <Modal
             className='productModal'
-            title={product ? 'Edit Product ' : 'New Product'}
+            title={edit ? 'Edit Product ' : 'New Product'}
             visible={show}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
           >
+            <h1> {product?.Product}</h1>
             <Form
               id='productForm'
               className='productForm'
               name='basic'
-              // initialValues={{ remember: true }}
+              initialValues={{ Product: product?.Product }}
               onFinish={this.saveProduct}
               onFinishFailed={this.saveProductFailed}
             >
               <Form.Item
                 label='Product Name'
                 name='Product'
-                initialValue={product ? product.Product : null}
+                id='Product'
+                className='Product'
+                valuePropName='Product'
                 rules={[
                   { required: true, message: 'Please add the product name!' },
                 ]}
@@ -80,7 +89,7 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
               <Form.Item
                 label='Product Code'
                 name='ProductCode'
-                initialValue={product ? product.ProductCode : null}
+                initialValue={product?.ProductCode}
                 rules={[
                   { required: true, message: 'Please add the product code!' },
                 ]}
@@ -91,7 +100,7 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
               <Form.Item
                 label='Product Location'
                 name='ProductLocation'
-                initialValue={product ? product.ProductLocation : null}
+                initialValue={product?.ProductLocation}
                 rules={[{ required: false }]}
               >
                 <Input />
@@ -100,7 +109,7 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
               <Form.Item
                 label='Product Cost'
                 name='ProductCost'
-                initialValue={product ? product.ProductCost : null}
+                initialValue={product?.ProductCost}
                 rules={[
                   {
                     type: 'number',
@@ -115,7 +124,7 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
               <Form.Item
                 label='Product Owner'
                 name='ProductOwner'
-                initialValue={product ? product.ProductOwner : null}
+                initialValue={product ? product.ProductOwner : undefined}
                 rules={[{ required: false }]}
               >
                 <Input />
@@ -124,7 +133,7 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
               <Form.Item
                 label='Owner Email'
                 name='OwnerEmail'
-                initialValue={product ? product.OwnerEmail : null}
+                initialValue={product ? product.OwnerEmail : undefined}
                 rules={[
                   {
                     type: 'email',

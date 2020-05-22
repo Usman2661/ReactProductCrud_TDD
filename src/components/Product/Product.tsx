@@ -1,30 +1,44 @@
 import React from 'react';
-import { Row, Col, Table, Card, Button } from 'antd';
+import { Row, Col, Table, Card, Button, Space } from 'antd';
 import ProductModal from './ProductModal';
 import { IProduct } from '../../Models/product';
 
 export interface IProductState {
   show: boolean;
   product?: IProduct;
+  edit: boolean;
 }
 export class Product extends React.Component<{}, IProductState> {
   constructor(props: any) {
     super(props);
     this.state = {
       show: false,
+      edit: false,
     };
   }
 
-  private openModal = () => {
+  private addProduct = () => {
     this.setState({
       show: true,
+      edit: false,
     });
   };
+
+  private editProduct = (product: IProduct) => {
+    this.setState({
+      edit: true,
+      product: product,
+    });
+  };
+  private deleteProduct = (id?: any) => {
+    console.log(id);
+  };
+
   render() {
-    const { show } = this.state;
+    const { show, product, edit } = this.state;
     const dataSource = [
       {
-        key: 1,
+        _id: '1',
         Product: 'Test Product',
         ProductCode: 'TS4',
         ProductLocation: 'Test Town',
@@ -33,7 +47,7 @@ export class Product extends React.Component<{}, IProductState> {
         OwnerEmail: 'test@hotmail.com',
       },
       {
-        key: 2,
+        _id: '2',
         Product: 'Playsation 4',
         ProductCode: 'PS$',
         ProductLocation: 'Play Town',
@@ -74,11 +88,30 @@ export class Product extends React.Component<{}, IProductState> {
         dataIndex: 'OwnerEmail',
         key: 'OwnerEmail',
       },
+      {
+        title: 'Actions',
+        key: 'action',
+        render: (text: any, product: IProduct) => (
+          <Space size='middle'>
+            <a href='!#' onClick={() => this.editProduct(product)}>
+              Edit{' '}
+            </a>
+            <a href='!#' onClick={() => this.deleteProduct(product._id)}>
+              Delete{' '}
+            </a>
+          </Space>
+        ),
+      },
     ];
 
     return (
       <div id='productTableContainer'>
-        <ProductModal show={show} product={this.state.product} />
+        {edit ? (
+          <ProductModal show={true} edit={true} product={product} />
+        ) : (
+          <ProductModal show={show} edit={false} />
+        )}
+
         <Row style={{ marginTop: '2%' }}>
           <Col
             xs={{ span: 12 }}
@@ -88,6 +121,7 @@ export class Product extends React.Component<{}, IProductState> {
             <Card title='Products' bordered={true}>
               <Table
                 id='productTable'
+                className='productTable'
                 dataSource={dataSource}
                 columns={columns}
               />
@@ -96,7 +130,7 @@ export class Product extends React.Component<{}, IProductState> {
                 type='primary'
                 id='productButton'
                 style={{ float: 'right' }}
-                onClick={this.openModal}
+                onClick={this.addProduct}
               >
                 Add Product
               </Button>
