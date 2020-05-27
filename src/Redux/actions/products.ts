@@ -50,6 +50,36 @@ export type ProductActions =
 
 /* Get All Action
 <Promise<Return Type>, State Interface, Type of Param, Type of Action> */
+export const setAlerts = (msg: string, type: string) => async (
+  dispatch: Dispatch
+) => {
+  console.log('I am being called', msg);
+  try {
+    console.log('I am being called', msg);
+    const id = uuid();
+
+    const alert = {
+      msg,
+      type,
+      id,
+    };
+
+    dispatch({
+      alert: alert,
+      type: AlertActionTypes.SET_ALERT,
+    });
+
+    setTimeout(
+      () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
+      5000
+    );
+  } catch (err) {
+    console.log('I am being called', msg);
+    console.error(err);
+  }
+  console.log('I am being called', msg);
+};
+
 export const getAllProducts: ActionCreator<ThunkAction<
   Promise<any>,
   IProductState,
@@ -86,24 +116,9 @@ export const createProduct: ActionCreator<ThunkAction<
         type: ProductActionTypes.CREATE_PRODUCT,
       });
 
-      const id = uuid();
-
-      const alert = {
-        msg: `Sucessfully Created Product ${product.Product} `,
-        type: 'success',
-        id,
-      };
-
-      dispatch({
-        alert: alert,
-        type: AlertActionTypes.SET_ALERT,
-      });
-
-      setTimeout(
-        () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
-        5000
-      );
+      setAlerts(`Succesfully Created Product ${product.Product}`, 'success');
     } catch (err) {
+      setAlerts(`An Error has occured ${err.message}`, 'error');
       console.error(err);
     }
   };
@@ -125,24 +140,10 @@ export const deleteProduct: ActionCreator<ThunkAction<
         type: ProductActionTypes.DELETE_PRODUCT,
       });
 
-      const alertID = uuid();
-
-      const alert = {
-        msg: `Sucessfully Deleted Product `,
-        type: 'info',
-        id,
-      };
-
-      dispatch({
-        alert: alert,
-        type: AlertActionTypes.SET_ALERT,
-      });
-
-      setTimeout(
-        () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: alertID }),
-        5000
-      );
+      setAlerts('Succesfully Deleted Product', 'warning');
     } catch (err) {
+      setAlerts(`An Error has occured ${err.message}`, 'error');
+
       console.error(err);
     }
   };
@@ -164,16 +165,20 @@ export const updateProduct: ActionCreator<ThunkAction<
         product: response.data.product,
         type: ProductActionTypes.UPDATE_PRODUCT,
       });
+
       const id = uuid();
+
       const alert = {
         msg: `Sucessfully Updated Product ${product.Product} `,
         type: 'success',
         id,
       };
+
       dispatch({
         alert: alert,
         type: AlertActionTypes.SET_ALERT,
       });
+
       setTimeout(
         () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
         5000
@@ -189,10 +194,12 @@ export const updateProduct: ActionCreator<ThunkAction<
         alert: alert,
         type: AlertActionTypes.SET_ALERT,
       });
+
       setTimeout(
         () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
         5000
       );
+
       console.error(err);
     }
   };
