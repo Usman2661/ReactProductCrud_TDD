@@ -1,18 +1,31 @@
 import React from 'react';
 import { Modal, Button, Input, Form, InputNumber } from 'antd';
 import { IProduct } from '../../Models/product';
+import { IAppState } from '../../Redux/store/Store';
+import { bindActionCreators, Dispatch } from 'redux';
+import { createProduct, updateProduct } from '../../Redux/actions/products';
+import { connect } from 'react-redux';
 
-interface ProductProps {
+interface IProductModalDefaultProps {
   product?: IProduct;
   show: boolean;
   edit?: boolean;
 }
 
-interface ProductState {
+interface IProductModalActionProps {
+  createProduct: typeof createProduct;
+  updateProduct: typeof updateProduct;
+}
+
+type IProductModalProps = IProductModalDefaultProps & IProductModalActionProps;
+interface IProductState {
   show: boolean;
 }
 
-export class ProductModal extends React.Component<ProductProps, ProductState> {
+export class ProductModalBase extends React.Component<
+  IProductModalProps,
+  IProductState
+> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -20,11 +33,7 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
     };
   }
 
-  componentWillReceiveProps(productProps: ProductProps) {
-    console.log(productProps.product);
-    console.log(productProps.edit);
-    console.log(productProps.show);
-
+  componentWillReceiveProps(productProps: IProductModalDefaultProps) {
     if (productProps.show) {
       this.setState({
         show: productProps.show,
@@ -44,7 +53,15 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
   };
 
   private saveProduct = (values: any) => {
-    console.log('Success:', values);
+    if (values.Product) {
+      // values._id = this.props.product?._id;
+      values['_id'] = this.props.product?._id;
+      if (this.props.edit) {
+        this.props.updateProduct(values);
+      } else {
+        this.props.createProduct(values);
+      }
+    }
   };
   private saveProductFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -69,7 +86,6 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
               id='productForm'
               className='productForm'
               name='basic'
-              initialValues={{ Product: product?.Product }}
               onFinish={this.saveProduct}
               onFinishFailed={this.saveProductFailed}
             >
@@ -78,7 +94,7 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
                 name='Product'
                 id='Product'
                 className='Product'
-                valuePropName='Product'
+                initialValue={edit ? product?.Product : undefined}
                 rules={[
                   { required: true, message: 'Please add the product name!' },
                 ]}
@@ -164,4 +180,24 @@ export class ProductModal extends React.Component<ProductProps, ProductState> {
   }
 }
 
-export default ProductModal;
+// Grab the characters from the store and make them available on props
+const mapStateToProps = (store: IAppState) => {
+  return {
+    products: store.productState.products,
+  };
+};
+
+const mapActionsToProps = (dispatch: Dispatch): IProductModalActionProps => {
+  return bindActionCreators(
+    {
+      createProduct: createProduct,
+      updateProduct: updateProduct,
+    },
+    dispatch
+  );
+};
+
+export const ProductModal = connect(
+  mapStateToProps,
+  mapActionsToProps
+)(ProductModalBase);
