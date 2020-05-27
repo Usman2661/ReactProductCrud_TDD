@@ -20,13 +20,13 @@ export const alertReducer: Reducer<IAlertState, AlertActions> = (
     case AlertActionTypes.SET_ALERT: {
       return {
         ...state,
-        alerts: action.alert,
+        alerts: [action.alert, ...state.alerts],
       };
     }
     case AlertActionTypes.REMOVE_ALERT: {
       return {
         ...state,
-        alerts: state.alerts.filter((alert: any) => alert._id !== action.alert),
+        alerts: state.alerts.filter((alert: any) => alert.id !== action.alert),
       };
     }
     default:

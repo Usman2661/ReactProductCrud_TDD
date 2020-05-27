@@ -40,8 +40,16 @@ export const setAlert: ActionCreator<ThunkAction<
   return async (dispatch: Dispatch) => {
     try {
       const id = uuid();
+
+      const alert = [
+        {
+          msg,
+          alertType,
+          id,
+        },
+      ];
       dispatch({
-        alert: { msg, alertType, id },
+        alert: alert,
         type: AlertActionTypes.SET_ALERT,
       });
 

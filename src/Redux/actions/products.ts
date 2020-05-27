@@ -2,11 +2,12 @@
 import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import axios from 'axios';
+import { v4 as uuid } from 'uuid';
 
 // Import Character Typing
 import { IProduct } from '../../Models/product';
 import { IProductState } from '../reducers/product';
-import { setAlert } from './alert';
+import { setAlert, AlertActionTypes } from './alert';
 
 // Create Action Constants
 export enum ProductActionTypes {
@@ -84,6 +85,24 @@ export const createProduct: ActionCreator<ThunkAction<
         product: response.data,
         type: ProductActionTypes.CREATE_PRODUCT,
       });
+
+      const id = uuid();
+
+      const alert = {
+        msg: `Sucessfully Created Product ${product.Product} `,
+        type: 'success',
+        id,
+      };
+
+      dispatch({
+        alert: alert,
+        type: AlertActionTypes.SET_ALERT,
+      });
+
+      setTimeout(
+        () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
+        5000
+      );
     } catch (err) {
       console.error(err);
     }
@@ -103,8 +122,26 @@ export const deleteProduct: ActionCreator<ThunkAction<
       );
       dispatch({
         id: response.data.id,
-        type: ProductActionTypes.UPDATE_PRODUCT,
+        type: ProductActionTypes.DELETE_PRODUCT,
       });
+
+      const alertID = uuid();
+
+      const alert = {
+        msg: `Sucessfully Deleted Product `,
+        type: 'info',
+        id,
+      };
+
+      dispatch({
+        alert: alert,
+        type: AlertActionTypes.SET_ALERT,
+      });
+
+      setTimeout(
+        () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: alertID }),
+        5000
+      );
     } catch (err) {
       console.error(err);
     }
@@ -127,7 +164,35 @@ export const updateProduct: ActionCreator<ThunkAction<
         product: response.data.product,
         type: ProductActionTypes.UPDATE_PRODUCT,
       });
+      const id = uuid();
+      const alert = {
+        msg: `Sucessfully Updated Product ${product.Product} `,
+        type: 'success',
+        id,
+      };
+      dispatch({
+        alert: alert,
+        type: AlertActionTypes.SET_ALERT,
+      });
+      setTimeout(
+        () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
+        5000
+      );
     } catch (err) {
+      const id = uuid();
+      const alert = {
+        msg: err.message,
+        type: 'error',
+        id,
+      };
+      dispatch({
+        alert: alert,
+        type: AlertActionTypes.SET_ALERT,
+      });
+      setTimeout(
+        () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
+        5000
+      );
       console.error(err);
     }
   };

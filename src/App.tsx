@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Alerts from './components/layout/alerts';
+import { Alerts } from './components/layout/alerts';
 import { Store } from 'redux';
 import { Provider } from 'react-redux';
 import { IAppState } from './Redux/store/Store';
