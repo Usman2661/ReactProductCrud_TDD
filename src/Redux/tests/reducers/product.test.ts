@@ -8,31 +8,13 @@ const initialState = {
 const initialStateWithData = {
   products: [
     {
-      _id: 1,
+      _id: 'jbjshjhsg',
       Product: 'Play Station 4',
       ProductCode: 'PS4',
       ProductLocation: 'Luton',
       ProductCost: 299.99,
       ProductOwner: 'Safian',
       OwnerEmail: 'usmanusman136@hotmail.com',
-    },
-    {
-      _id: 2,
-      Product: 'Play Station 4',
-      ProductCode: 'PS4',
-      ProductLocation: 'Luton',
-      ProductCost: 299.99,
-      ProductOwner: 'Safian',
-      OwnerEmail: 'usmanusman137@hotmail.com',
-    },
-    {
-      _id: 3,
-      Product: 'Play Station 4',
-      ProductCode: 'PS4',
-      ProductLocation: 'Luton',
-      ProductCost: 299.99,
-      ProductOwner: 'Safian',
-      OwnerEmail: 'usmanusman138@hotmail.com',
     },
   ],
 };
@@ -66,6 +48,46 @@ it('It Handles the GET_PRODUCTS Actions properly', () => {
         _id: 'jhhhgjh898',
         Product: 'Play Station 4',
         ProductCode: 'PS4',
+        ProductLocation: 'Luton',
+        ProductCost: 299.99,
+        ProductOwner: 'Safian',
+        OwnerEmail: 'usmanusman136@hotmail.com',
+      },
+    ],
+  });
+});
+
+it('handles CREATE_PRODUCT as expected', () => {
+  const reducer = productReducer(initialStateWithData, {
+    type: ProductActionTypes.CREATE_PRODUCT,
+
+    product: {
+      _id: '5kshkhas',
+      Product: 'Play Station 4',
+      ProductCode: 'PS4',
+      ProductLocation: 'Luton',
+      ProductCost: 299.99,
+      ProductOwner: 'Safian',
+      OwnerEmail: 'usmanusman140@hotmail.com',
+    },
+  });
+
+  expect(reducer).toEqual({
+    products: [
+      {
+        _id: '5kshkhas',
+        Product: 'Play Station 4',
+        ProductCode: 'PS4',
+        ProductLocation: 'Luton',
+        ProductCost: 299.99,
+        ProductOwner: 'Safian',
+        OwnerEmail: 'usmanusman140@hotmail.com',
+      },
+      {
+        _id: 'jbjshjhsg',
+        Product: 'Play Station 4',
+        ProductCode: 'PS4',
+        ProductLocation: 'Luton',
         ProductCost: 299.99,
         ProductOwner: 'Safian',
         OwnerEmail: 'usmanusman136@hotmail.com',
