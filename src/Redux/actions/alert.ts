@@ -31,31 +31,23 @@ export type AlertActions = SetAlertAction | RemoveAlertAction;
 
 /* Get All Action
 <Promise<Return Type>, State Interface, Type of Param, Type of Action> */
-export const setAlert: ActionCreator<ThunkAction<
-  Promise<any>,
-  IAlertState,
-  null,
-  SetAlertAction
->> = (msg, alertType, timeout = 5000) => {
+
+export const setMyAlert = (msg: string, type: string) => {
   return async (dispatch: Dispatch) => {
     try {
       const id = uuid();
-
-      const alert = [
-        {
-          msg,
-          alertType,
-          id,
-        },
-      ];
+      const alert = {
+        msg,
+        type,
+        id,
+      };
       dispatch({
         alert: alert,
         type: AlertActionTypes.SET_ALERT,
       });
-
       setTimeout(
         () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
-        timeout
+        5000
       );
     } catch (err) {
       console.error(err);

@@ -8,8 +8,9 @@ import { connect } from 'react-redux';
 
 interface IProductModalDefaultProps {
   product?: IProduct;
-  show: boolean;
   edit?: boolean;
+  onCancel: () => void;
+  // onOk: (product: IProduct) => void;
 }
 
 interface IProductModalActionProps {
@@ -18,43 +19,24 @@ interface IProductModalActionProps {
 }
 
 type IProductModalProps = IProductModalDefaultProps & IProductModalActionProps;
-interface IProductState {
-  show: boolean;
-}
 
-export class ProductModalBase extends React.Component<
-  IProductModalProps,
-  IProductState
-> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      show: false,
-    };
-  }
+export class ProductModalBase extends React.Component<IProductModalProps> {
+  // private onOk = () => {
+  // //   const { product, onOk } = this.props;
+  // //   form.validateFieldsAndScroll((err: any, values: IProduct) => {
+  // //     if (err) {
+  // //       return;
+  // //     }
 
-  componentWillReceiveProps(productProps: IProductModalDefaultProps) {
-    if (productProps.show) {
-      this.setState({
-        show: productProps.show,
-      });
-    }
-  }
-
-  private handleOk = () => {
-    this.setState({
-      show: false,
-    });
-  };
-  private handleCancel = () => {
-    this.setState({
-      show: false,
-    });
-  };
+  // //     onOk({
+  // //       ...carrier,
+  // //       ...values,
+  // //     });
+  // //   });
+  // // };
 
   private saveProduct = (values: any) => {
     if (values.Product) {
-      // values._id = this.props.product?._id;
       values['_id'] = this.props.product?._id;
       if (this.props.edit) {
         this.props.updateProduct(values);
@@ -68,8 +50,7 @@ export class ProductModalBase extends React.Component<
   };
 
   render() {
-    const { show } = this.state;
-    const { edit, product } = this.props;
+    const { edit, product, onCancel } = this.props;
 
     return (
       <div>
@@ -77,11 +58,10 @@ export class ProductModalBase extends React.Component<
           <Modal
             className='productModal'
             title={edit ? 'Edit Product ' : 'New Product'}
-            visible={show}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
+            visible={true}
+            onOk={this.saveProduct}
+            onCancel={onCancel}
           >
-            <h1> {product?.Product}</h1>
             <Form
               id='productForm'
               className='productForm'
@@ -105,7 +85,7 @@ export class ProductModalBase extends React.Component<
               <Form.Item
                 label='Product Code'
                 name='ProductCode'
-                initialValue={product?.ProductCode}
+                initialValue={edit ? product?.ProductCode : undefined}
                 rules={[
                   { required: true, message: 'Please add the product code!' },
                 ]}
@@ -116,7 +96,7 @@ export class ProductModalBase extends React.Component<
               <Form.Item
                 label='Product Location'
                 name='ProductLocation'
-                initialValue={product?.ProductLocation}
+                initialValue={edit ? product?.ProductLocation : undefined}
                 rules={[{ required: false }]}
               >
                 <Input />
@@ -125,7 +105,7 @@ export class ProductModalBase extends React.Component<
               <Form.Item
                 label='Product Cost'
                 name='ProductCost'
-                initialValue={product?.ProductCost}
+                initialValue={edit ? product?.ProductCost : undefined}
                 rules={[
                   {
                     type: 'number',
@@ -140,7 +120,7 @@ export class ProductModalBase extends React.Component<
               <Form.Item
                 label='Product Owner'
                 name='ProductOwner'
-                initialValue={product ? product.ProductOwner : undefined}
+                initialValue={edit ? product?.ProductOwner : undefined}
                 rules={[{ required: false }]}
               >
                 <Input />
@@ -149,7 +129,7 @@ export class ProductModalBase extends React.Component<
               <Form.Item
                 label='Owner Email'
                 name='OwnerEmail'
-                initialValue={product ? product.OwnerEmail : undefined}
+                initialValue={edit ? product?.OwnerEmail : undefined}
                 rules={[
                   {
                     type: 'email',
@@ -180,7 +160,6 @@ export class ProductModalBase extends React.Component<
   }
 }
 
-// Grab the characters from the store and make them available on props
 const mapStateToProps = (store: IAppState) => {
   return {
     products: store.productState.products,

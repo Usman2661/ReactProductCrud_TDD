@@ -2,12 +2,11 @@
 import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import axios from 'axios';
-import { v4 as uuid } from 'uuid';
 
 // Import Character Typing
 import { IProduct } from '../../Models/product';
 import { IProductState } from '../reducers/product';
-import { setAlert, AlertActionTypes } from './alert';
+import { setMyAlert } from './alert';
 
 // Create Action Constants
 export enum ProductActionTypes {
@@ -50,35 +49,6 @@ export type ProductActions =
 
 /* Get All Action
 <Promise<Return Type>, State Interface, Type of Param, Type of Action> */
-export const setAlerts = (msg: string, type: string) => async (
-  dispatch: Dispatch
-) => {
-  console.log('I am being called', msg);
-  try {
-    console.log('I am being called', msg);
-    const id = uuid();
-
-    const alert = {
-      msg,
-      type,
-      id,
-    };
-
-    dispatch({
-      alert: alert,
-      type: AlertActionTypes.SET_ALERT,
-    });
-
-    setTimeout(
-      () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
-      5000
-    );
-  } catch (err) {
-    console.log('I am being called', msg);
-    console.error(err);
-  }
-  console.log('I am being called', msg);
-};
 
 export const getAllProducts: ActionCreator<ThunkAction<
   Promise<any>,
@@ -116,9 +86,11 @@ export const createProduct: ActionCreator<ThunkAction<
         type: ProductActionTypes.CREATE_PRODUCT,
       });
 
-      setAlerts(`Succesfully Created Product ${product.Product}`, 'success');
+      dispatch<any>(
+        setMyAlert(`Succesfully Created Product ${product.Product}`, 'success')
+      );
     } catch (err) {
-      setAlerts(`An Error has occured ${err.message}`, 'error');
+      dispatch<any>(setMyAlert(`An Error has occured ${err.message}`, 'error'));
       console.error(err);
     }
   };
@@ -140,9 +112,9 @@ export const deleteProduct: ActionCreator<ThunkAction<
         type: ProductActionTypes.DELETE_PRODUCT,
       });
 
-      setAlerts('Succesfully Deleted Product', 'warning');
+      dispatch<any>(setMyAlert('Succesfully Deleted Product', 'warning'));
     } catch (err) {
-      setAlerts(`An Error has occured ${err.message}`, 'error');
+      dispatch<any>(setMyAlert(`An Error has occured ${err.message}`, 'error'));
 
       console.error(err);
     }
@@ -166,40 +138,11 @@ export const updateProduct: ActionCreator<ThunkAction<
         type: ProductActionTypes.UPDATE_PRODUCT,
       });
 
-      const id = uuid();
-
-      const alert = {
-        msg: `Sucessfully Updated Product ${product.Product} `,
-        type: 'success',
-        id,
-      };
-
-      dispatch({
-        alert: alert,
-        type: AlertActionTypes.SET_ALERT,
-      });
-
-      setTimeout(
-        () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
-        5000
+      dispatch<any>(
+        setMyAlert(`Succesfully Updated Product ${product.Product}`, 'success')
       );
     } catch (err) {
-      const id = uuid();
-      const alert = {
-        msg: err.message,
-        type: 'error',
-        id,
-      };
-      dispatch({
-        alert: alert,
-        type: AlertActionTypes.SET_ALERT,
-      });
-
-      setTimeout(
-        () => dispatch({ type: AlertActionTypes.REMOVE_ALERT, alert: id }),
-        5000
-      );
-
+      dispatch<any>(setMyAlert(`An Error has occured ${err.message}`, 'error'));
       console.error(err);
     }
   };

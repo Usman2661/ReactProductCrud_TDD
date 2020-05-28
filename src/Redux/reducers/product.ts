@@ -15,7 +15,6 @@ const initialProduct: IProduct = {
   ProductCode: '',
 };
 
-// Define the initial state
 const initialProductState: IProductState = {
   products: [],
   product: initialProduct,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Table, Card, Button, Space, Spin } from 'antd';
+import { Row, Col, Table, Card, Button, Space, Spin, Popover } from 'antd';
 import { ProductModal } from './ProductModal';
 import { IProduct } from '../../Models/product';
 import { connect } from 'react-redux';
@@ -17,9 +17,9 @@ export interface IProductActionProps {
 }
 
 export interface IProductState {
-  show: boolean;
+  showProductModal: boolean;
   product?: IProduct;
-  edit: boolean;
+  editProduct: boolean;
 }
 
 export type IProductProps = IProductPropsDefault & IProductActionProps;
@@ -28,8 +28,8 @@ export class ProductBase extends React.Component<IProductProps, IProductState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      show: false,
-      edit: false,
+      showProductModal: false,
+      editProduct: false,
     };
   }
 
@@ -39,48 +39,30 @@ export class ProductBase extends React.Component<IProductProps, IProductState> {
 
   private addProduct = () => {
     this.setState({
-      show: true,
-      edit: false,
+      showProductModal: true,
+      editProduct: false,
     });
   };
 
   private editProduct = (product: IProduct) => {
     this.setState({
-      edit: true,
+      editProduct: true,
+      showProductModal: true,
       product: product,
     });
   };
   private deleteProduct = (product: IProduct) => {
     this.props.deleteProduct(product._id);
-    console.log('Deleted ', product.Product);
+  };
+  private closeProductModal = () => {
+    this.setState({
+      showProductModal: false,
+    });
   };
 
   render() {
-    const { show, product, edit } = this.state;
+    const { showProductModal, product, editProduct } = this.state;
     const { products } = this.props;
-
-    // const dataSource = [
-    //   {
-    //     _id: '1',
-    //     key: 1,
-    //     Product: 'Test Product',
-    //     ProductCode: 'TS4',
-    //     ProductLocation: 'Test Town',
-    //     ProductCost: 299.99,
-    //     ProductOwner: 'Test',
-    //     OwnerEmail: 'test@hotmail.com',
-    //   },
-    //   {
-    //     key: 2,
-    //     _id: '2',
-    //     Product: 'Playsation 4',
-    //     ProductCode: 'PS$',
-    //     ProductLocation: 'Play Town',
-    //     ProductCost: 299.99,
-    //     ProductOwner: 'Playslattion',
-    //     OwnerEmail: 'conatct@psn.com',
-    //   },
-    // ];
 
     const columns = [
       {
@@ -117,21 +99,25 @@ export class ProductBase extends React.Component<IProductProps, IProductState> {
         title: 'Actions',
         key: 'action',
         render: (text: any, product: IProduct) => (
-          <Space size='middle'>
-            <a onClick={() => this.editProduct(product)}>Edit </a>
-            <a onClick={() => this.deleteProduct(product)}>Delete </a>
-          </Space>
+          <div className='productAction'>
+            <Space size='middle'>
+              <a onClick={() => this.editProduct(product)}>Edit </a>
+              <a onClick={() => this.deleteProduct(product)}>Delete </a>
+            </Space>
+          </div>
         ),
       },
     ];
 
     return (
       <div id='productTableContainer'>
-        {edit ? (
-          <ProductModal show={true} edit={true} product={product} />
-        ) : (
-          <ProductModal show={show} edit={false} />
-        )}
+        {showProductModal ? (
+          <ProductModal
+            edit={editProduct}
+            product={product}
+            onCancel={this.closeProductModal}
+          />
+        ) : null}
 
         <Row style={{ marginTop: '2%' }}>
           <Col
@@ -167,13 +153,13 @@ export class ProductBase extends React.Component<IProductProps, IProductState> {
   }
 }
 
-// Grab the characters from the store and make them available on props
+// Mapping the state of the store to the props of the components
 const mapStateToProps = (store: IAppState) => {
   return {
     products: store.productState.products,
   };
 };
-
+//Mapping teh store actions to the props of the page
 const mapActionsToProps = (dispatch: Dispatch): IProductActionProps => {
   return bindActionCreators(
     {
