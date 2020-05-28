@@ -57,6 +57,7 @@ export class ProductBase extends React.Component<IProductProps, IProductState> {
   private closeProductModal = () => {
     this.setState({
       showProductModal: false,
+      editProduct: false,
     });
   };
 
@@ -101,8 +102,18 @@ export class ProductBase extends React.Component<IProductProps, IProductState> {
         render: (text: any, product: IProduct) => (
           <div className='productAction'>
             <Space size='middle'>
-              <a onClick={() => this.editProduct(product)}>Edit </a>
-              <a onClick={() => this.deleteProduct(product)}>Delete </a>
+              <a
+                onClick={() => this.editProduct(product)}
+                className='editProduct'
+              >
+                Edit{' '}
+              </a>
+              <a
+                onClick={() => this.deleteProduct(product)}
+                className='deleteProduct'
+              >
+                Delete{' '}
+              </a>
             </Space>
           </div>
         ),
@@ -134,7 +145,7 @@ export class ProductBase extends React.Component<IProductProps, IProductState> {
                   columns={columns}
                 />
               ) : (
-                <Spin tip='Loading...' />
+                <Spin tip='Loading...' className='tableLoader' />
               )}
 
               <Button

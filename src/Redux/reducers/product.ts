@@ -5,7 +5,6 @@ import { ProductActions, ProductActionTypes } from '../actions/products';
 // Define the Product State
 export interface IProductState {
   readonly products: IProduct[];
-  readonly product: IProduct;
 }
 
 const initialProduct: IProduct = {
@@ -17,7 +16,7 @@ const initialProduct: IProduct = {
 
 const initialProductState: IProductState = {
   products: [],
-  product: initialProduct,
+  // product: initialProduct,
 };
 
 export const productReducer: Reducer<IProductState, ProductActions> = (

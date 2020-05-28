@@ -21,7 +21,12 @@ export class AlertsBase extends React.Component<IALertDefaultProps> {
           <Col span={12} offset={6} style={{ marginTop: '2%' }}>
             {alerts.length > 0
               ? alerts.map((alert: any) => (
-                  <Alert message={alert.msg} type={alert.type} showIcon />
+                  <Alert
+                    message={alert.msg}
+                    type={alert.type}
+                    showIcon
+                    className={`alertMessage${alert.type}`}
+                  />
                 ))
               : null}
           </Col>

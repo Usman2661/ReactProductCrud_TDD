@@ -2,6 +2,7 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { ProductModalBase } from '../../components/Product/ProductModal';
+import { wrap } from 'module';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
@@ -36,11 +37,6 @@ describe('Initial Rendering of elements', () => {
     const modalContainer = findByTestAttr(wrapper, 'modalContainer');
     expect(modalContainer.length).toBe(1);
   });
-
-  test('Initial State of show is false and modal is hidden', () => {
-    const wrapper = setup(null, null);
-    expect(wrapper.state('show')).toBeFalsy();
-  });
   test('renders the modal without any error', () => {
     const wrapper = setup(null, null);
     const productModal = findByTestAtrrByClassName(wrapper, 'productModal');
@@ -54,13 +50,14 @@ describe('Initial Rendering of elements', () => {
 });
 
 describe('When Different prop values are passed', () => {
-  test('By Default the form fields are empty with no text', () => {
-    const wrapper = shallow(<ProductModalBase show={true} edit={false} />);
-    const productModal = findByTestAtrrByClassName(wrapper, 'productForm');
-    expect(productModal.length).toBe(1);
-    const productField = findByTestAtrrByClassName(wrapper, 'Product');
-    expect(productField.length).toBe(1);
-    expect(productField.value).toBe(undefined);
+  test('When the edit is true the Modal should have title edit product', () => {
+    const wrapper = shallow(<ProductModalBase edit={true} />);
+
+    // const productModal = findByTestAtrrByClassName(wrapper, 'productForm');
+    // expect(productModal.length).toBe(1);
+    // const productField = findByTestAtrrByClassName(wrapper, 'Product');
+    // expect(productField.length).toBe(1);
+    // expect(productField.value).toBe(undefined);
     // console.log(productField.value);
   });
   // test('When the cancel button is clicked the modal disappears with false show state', () => {
@@ -71,12 +68,9 @@ describe('When Different prop values are passed', () => {
   //   expect(title.length).toBe(1);
   // });
   test('If the product is passed in the props then the fields should contain values', () => {
-    const wrapper = shallow(
-      <ProductModalBase show={true} edit={true} product={product} />
-    );
-    // expect(wrapper.props().show).toBe(true);
+    const wrapper = shallow(<ProductModalBase edit={true} />);
 
-    console.log(wrapper.props().show);
+    // console.log(wrapper.props().show);
 
     // const productModal = findByTestAtrrByClassName(wrapper, 'productForm');
     // expect(productModal.length).toBe(1);

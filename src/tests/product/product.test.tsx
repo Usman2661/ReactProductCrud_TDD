@@ -32,10 +32,10 @@ describe('Rendering of elements', () => {
     );
     expect(productTableContainer.length).toBe(1);
   });
-  test('renders table without any error', () => {
+  test('renders the table loader', () => {
     const wrapper = setup();
-    const productTable = findByTestAttr(wrapper, 'productTable');
-    expect(productTable.length).toBe(1);
+    const tableLoader = findByTestAtrrByClassName(wrapper, 'tableLoader');
+    expect(tableLoader.length).toBe(1);
   });
   test('renders button without any error', () => {
     const wrapper = setup();
@@ -47,13 +47,13 @@ describe('Rendering of elements', () => {
 describe('Functionality', () => {
   test('Initial state of the show is false', () => {
     const wrapper = setup();
-    expect(wrapper.state('show')).toBeFalsy();
+    expect(wrapper.state('showProductModal')).toBeFalsy();
   });
   test('Button Click changes the state to true and opens the modal', () => {
     const wrapper = setup();
     const productButton = findByTestAttr(wrapper, 'productButton');
     expect(productButton.length).toBe(1);
     productButton.simulate('click');
-    expect(wrapper.state('show')).toBeTruthy();
+    expect(wrapper.state('showProductModal')).toBeTruthy();
   });
 });
