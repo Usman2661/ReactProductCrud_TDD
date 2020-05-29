@@ -87,10 +87,16 @@ export const createProduct: ActionCreator<ThunkAction<
       });
 
       dispatch<any>(
-        setMyAlert(`Succesfully Created Product ${product.Product}`, 'success')
+        setMyAlert(
+          `Succesfully Created Product ${product.Product}`,
+          'success',
+          'create'
+        )
       );
     } catch (err) {
-      dispatch<any>(setMyAlert(`An Error has occured ${err.message}`, 'error'));
+      dispatch<any>(
+        setMyAlert(`An Error has occured ${err.message}`, 'error', 'ERROR')
+      );
       console.error(err);
     }
   };
@@ -112,9 +118,13 @@ export const deleteProduct: ActionCreator<ThunkAction<
         type: ProductActionTypes.DELETE_PRODUCT,
       });
 
-      dispatch<any>(setMyAlert('Succesfully Deleted Product', 'warning'));
+      dispatch<any>(
+        setMyAlert('Succesfully Deleted Product', 'warning', 'delete')
+      );
     } catch (err) {
-      dispatch<any>(setMyAlert(`An Error has occured ${err.message}`, 'error'));
+      dispatch<any>(
+        setMyAlert(`An Error has occured ${err.message}`, 'error', 'ERROR')
+      );
 
       console.error(err);
     }
@@ -139,10 +149,16 @@ export const updateProduct: ActionCreator<ThunkAction<
       });
 
       dispatch<any>(
-        setMyAlert(`Succesfully Updated Product ${product.Product}`, 'success')
+        setMyAlert(
+          `Succesfully Updated Product ${product.Product}`,
+          'success',
+          'update'
+        )
       );
     } catch (err) {
-      dispatch<any>(setMyAlert(`An Error has occured ${err.message}`, 'error'));
+      dispatch<any>(
+        setMyAlert(`An Error has occured ${err.message}`, 'error', 'ERROR')
+      );
       console.error(err);
     }
   };

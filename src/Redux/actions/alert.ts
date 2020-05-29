@@ -32,13 +32,14 @@ export type AlertActions = SetAlertAction | RemoveAlertAction;
 /* Get All Action
 <Promise<Return Type>, State Interface, Type of Param, Type of Action> */
 
-export const setMyAlert = (msg: string, type: string) => {
+export const setMyAlert = (msg: string, type: string, title: string) => {
   return async (dispatch: Dispatch) => {
     try {
       const id = uuid();
       const alert = {
         msg,
         type,
+        title,
         id,
       };
       dispatch({

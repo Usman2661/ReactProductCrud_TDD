@@ -12,7 +12,7 @@ beforeAll(async () => {
   browser = await puppeteer.launch({
     headless: false,
     devtools: false,
-    slowMo: 20,
+    slowMo: 6,
   });
   page = await browser.newPage();
   page.emulate({
@@ -22,6 +22,9 @@ beforeAll(async () => {
     },
     userAgent: '',
   });
+  jest.setTimeout(9000000);
+
+  await page.goto('http://localhost:3000/');
 });
 
 const number = Math.floor(Math.random() * 90000) + 10000;
@@ -36,14 +39,22 @@ const product = {
   OwnerEmail: email,
 };
 
+const updateProduct = {
+  Product: 'Update E2E',
+  ProductCode: 'Update E2E',
+  ProductLocation: 'Update Test Town',
+  ProductCost: '155.55',
+  ProductOwner: 'Update Test',
+  OwnerEmail: 'update' + email,
+};
+
 describe('Products', () => {
-  test('Table is loaded by default', async () => {
-    await page.goto('http://localhost:3000/');
+  test('Table is Loaded with data', async (done) => {
     await page.waitForSelector('.productTable');
+    done();
   }, 9000000);
 
-  test('Creating a new product', async () => {
-    await page.goto('http://localhost:3000/');
+  test('Creating a new product', async (done) => {
     // await page.waitForSelector('.productTable');
     await page.waitForSelector('#productButton');
     await page.click('#productButton');
@@ -59,6 +70,7 @@ describe('Products', () => {
     await page.type('.ProductLocation', product.ProductLocation);
 
     await page.click('.ProductCost');
+
     await page.type('#basic_ProductCost', product.ProductCost);
 
     await page.click('.ProductOwner');
@@ -70,30 +82,50 @@ describe('Products', () => {
     await page.waitForSelector('.saveProduct');
     await page.click('#saveProduct');
 
-    await page.waitForSelector('.alertMessagesuccess');
+    await page.waitForSelector('.alertMessagecreatesuccess');
 
-    // await browser.close();
+    done();
   }, 9000000);
 
-  test('Editing a product', async () => {
-    await page.goto('http://localhost:3000/');
+  test('Editing a product', async (done) => {
     // await page.waitForSelector('.productTable');
     await page.waitForSelector('.productTable');
 
     await page.waitForSelector('.editProduct');
     await page.click('.editProduct');
+
+    await page.click('.Product', { clickCount: 3 });
+    await page.type('.Product', updateProduct.Product);
+
+    await page.click('.ProductCode', { clickCount: 3 });
+    await page.type('.ProductCode', updateProduct.ProductCode);
+
+    await page.click('.ProductLocation', { clickCount: 3 });
+    await page.type('.ProductLocation', updateProduct.ProductLocation);
+
+    await page.click('.ProductCost', { clickCount: 3 });
+    await page.click('#basic_ProductCost', { clickCount: 3 });
+    await page.type('#basic_ProductCost', updateProduct.ProductCost);
+
+    await page.click('.ProductOwner', { clickCount: 3 });
+    await page.type('.ProductOwner', updateProduct.ProductOwner);
+
+    await page.click('.OwnerEmail', { clickCount: 3 });
+    await page.type('.OwnerEmail', updateProduct.OwnerEmail);
+
+    await page.waitForSelector('.saveProduct');
+    await page.click('#saveProduct');
+
+    await page.waitForSelector('.alertMessageupdatesuccess');
+    done();
   }, 9000000);
 
-  test('Deleting a product', async () => {
-    await page.goto('http://localhost:3000/');
+  test('Deleting a product', async (done) => {
     // await page.waitForSelector('.productTable');
     await page.waitForSelector('.productTable');
-
     await page.waitForSelector('.deleteProduct');
     await page.click('.deleteProduct');
-
-    await page.waitForSelector('.alertMessagewarning');
-
-    // await browser.close();
+    await page.waitForSelector('.alertMessagedeletewarning');
+    done();
   }, 9000000);
 });

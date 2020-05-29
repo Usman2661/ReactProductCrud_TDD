@@ -25,7 +25,7 @@ export class AlertsBase extends React.Component<IALertDefaultProps> {
                     message={alert.msg}
                     type={alert.type}
                     showIcon
-                    className={`alertMessage${alert.type}`}
+                    className={`alertMessage${alert.title}${alert.type}`}
                   />
                 ))
               : null}
